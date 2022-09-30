@@ -27,11 +27,11 @@ cd
 DISK=$1
 	P_CHECK=$(lsblk -o NAME,FSTYPE -dSn | grep -o $DISK)
 	if [ "$P_CHECK" == "$DISK" ] ; then
-		echo "hahaha! The YOUR Disk and the Disk on that folder it is the same for you!"
+		echo "hahaha! This Disk and the Disk on that folder it is the same for you!"
 		echo "still want to continue? (yes/no)"
 		read ANSWER
-		if [ "$ANSWER" == "yes" ] ; then
-			echo "разметка диска"
+		if [ "$ANSWER" == "yes" || "$ANSWER" == "y"] ; then
+			echo "disk markup"
 			sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' <<- EOF | fdisk /dev/$DISK
 			o # clear the in memory partition table
 			n # new partition
@@ -61,8 +61,8 @@ fsys_maker()
 {
 echo "making file system"
 
-mkfs.vfat /dev/sda1
-mkfs.ext4 /dev/sda2
+mkfs.vfat dev/sda1
+mkfs.ext4 dev/sda2
 
 mkdir /mnt/gentoo/boot
 mount /dev/sda2 /mnt/gentoo
