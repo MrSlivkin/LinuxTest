@@ -42,10 +42,7 @@ partition()
 			w # write the partition table
 			q # and we're done
 			EOF
-		else
-			echo "goodbye" ; exit 0
 		fi
-	fi
 	cd
 }
 
@@ -65,6 +62,10 @@ DISK=$1
 		else if ["$ANSWER" == "y"] ; then
 		
 		partition || DEBUGGER
+		
+		else
+			echo "goodbye" ; exit 0
+		fi
 		
 }
 
