@@ -30,7 +30,7 @@ DISK=$1
 		echo "Your Disk and the Disk on that folder it is the same thing"
 		echo "still want to continue? (yes/no)"
 		read ANSWER
-		if [[ "$ANSWER" == "yes" || "$ANSWER" == "y"]] ; then
+		if [ "$ANSWER" == "yes"] ; then
 			echo "disk markup"
 			sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' <<- EOF | fdisk /dev/$DISK
 			o # clear the in memory partition table
@@ -61,7 +61,7 @@ fsys_maker()
 {
 echo "making file system"
 
-mkfs.vfat dev/sda1
+mkfs.vfat -F 32 dev/sda1
 mkfs.ext4 dev/sda2
 
 mkdir /mnt/gentoo/boot
@@ -86,7 +86,9 @@ echo "Error: $1"
 exit 1
 }
 
-password
-partition
-fsys_maker || DEBUGGER
-stage3_maker || DEBUGGER
+password || DEBUGGER "password error"
+echo "target your disk for partition"
+read DISK
+partition $DISK || DEBUGGER "DISK partition error"
+fsys_maker || DEBUGGER "file system making error"
+stage3_maker || DEBUGGER "stage3 installation error"
