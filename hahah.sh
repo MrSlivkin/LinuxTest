@@ -42,7 +42,6 @@ partition()
 			w # write the partition table
 			q # and we're done
 			EOF
-		fi
 	cd
 }
 
