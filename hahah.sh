@@ -16,8 +16,15 @@ ntpd -q -g
 
 password()
 {
-echo "Make a password for root"
-passwd
+echo " wanna Make a password for root?"
+read RESPONS
+	if [ "$RESPONS" == "yes"]
+		passwd
+		else
+			echo "goodbye" ; exit 0
+		fi
+	fi
+
 }
 
 
@@ -30,7 +37,7 @@ DISK=$1
 		echo "Your Disk and the Disk on that folder it is the same thing"
 		echo "still want to continue? (yes/no)"
 		read ANSWER
-		if [ "$ANSWER" == "yes"] ; then
+		if [ "$ANSWER" == "yes" ] ; then
 			echo "disk markup"
 			sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' <<- EOF | fdisk /dev/$DISK
 			o # clear the in memory partition table
@@ -59,14 +66,14 @@ DISK=$1
 
 fsys_maker() 
 {
-echo "making file system"
+	echo "making file system"
 
-mkfs.vfat -F 32 dev/sda1
-mkfs.ext4 dev/sda2
-
-mkdir /mnt/gentoo/boot
-mount /dev/sda2 /mnt/gentoo
-mount /dev/sda1 /mnt/gentoo/boot
+	mkfs.vfat -F 32 dev/sda1
+	mkfs.ext4 dev/sda2
+	
+	mount /dev/sda2 /mnt/gentoo
+	mkdir /mnt/gentoo/boot
+	mount /dev/sda1 /mnt/gentoo/boot
 }
 
 stage3_maker()
@@ -80,15 +87,15 @@ tar xpvf stage3-*.tar.bz2 --xattrs-include='*.*' --numeric-owner
 }
 
 
-DEBUGGER()
+debugger()
 {
 echo "Error: $1"
 exit 1
 }
 
-password || DEBUGGER "password error"
+password || debugger "password error"
 echo "target your disk for partition"
 read DISK
-partition $DISK || DEBUGGER "DISK partition error"
-fsys_maker || DEBUGGER "file system making error"
-stage3_maker || DEBUGGER "stage3 installation error"
+partition $DISK || debugger "DISK partition error"
+fsys_maker || debugger "file system making error"
+stage3_maker || debugger "stage3 installation error"
