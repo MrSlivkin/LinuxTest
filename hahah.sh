@@ -23,6 +23,14 @@ passwd
 
 partition()
 {
+cd
+DISK=$1
+	P_CHECK=$(lsblk -o NAME,FSTYPE -dSn | grep -o $DISK)
+	if [ "$P_CHECK" == "$DISK" ] ; then
+		echo "Your Disk and the Disk on that folder it is the same thing"
+		echo "still want to continue? (yes/no)"
+		read ANSWER
+		if [[ "$ANSWER" == "yes" || "$ANSWER" == "y"]] ; then
 			echo "disk markup"
 			sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' <<- EOF | fdisk /dev/$DISK
 			o # clear the in memory partition table
@@ -42,30 +50,11 @@ partition()
 			w # write the partition table
 			q # and we're done
 			EOF
-	cd
-}
-
-answer()
-{
-cd
-DISK=$1
-	P_CHECK=$(lsblk -o NAME,FSTYPE -dSn | grep -o $DISK)
-	if [ "$P_CHECK" == "$DISK" ] ; then
-		echo "hahaha! This Disk and the Disk on that folder it is the same for you!"
-		echo "still want to continue? (yes/no)"
-		read ANSWER
-		if [ "$ANSWER" == "yes"] ; then
-		
-		partition || DEBUGGER
-		
-		else if ["$ANSWER" == "y"] ; then
-		
-		partition || DEBUGGER
-		
 		else
 			echo "goodbye" ; exit 0
 		fi
-		
+	fi
+	cd
 }
 
 fsys_maker() 
@@ -98,5 +87,6 @@ exit 1
 }
 
 password
+partition
 fsys_maker || DEBUGGER
 stage3_maker || DEBUGGER
