@@ -18,12 +18,12 @@ password()
 {
 echo " wanna Make a password for root?"
 read RESPONS
-	if [ "$RESPONS" == "yes"]
+	if [ "$RESPONS" == "yes"] ; then
 		passwd
-		else
-			echo "goodbye" ; exit 0
-		fi
+	else
+		echo "goodbye"
 	fi
+
 
 }
 
@@ -68,11 +68,10 @@ fsys_maker()
 {
 	echo "making file system"
 
-	mkfs.vfat -F 32 dev/sda1
-	mkfs.ext4 dev/sda2
-	
-	mount /dev/sda2 /mnt/gentoo
+	mkfs.vfat -F 32 /dev/sda1
+	mkfs.ext4 /dev/sda2
 	mkdir /mnt/gentoo/boot
+	mount /dev/sda2 /mnt/gentoo
 	mount /dev/sda1 /mnt/gentoo/boot
 }
 
