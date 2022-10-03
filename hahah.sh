@@ -6,7 +6,7 @@ set -x
 MAKE_PATH=/mnt/gentoo/etc/portage/make.conf
 #A_L=ACCEPT_LICENSE="-* @FREE"
 
-STAGE3_FILE=$(curl -s http://mirror.yandex.ru/gentoo-distfiles/releases/amd64/autobuilds)
+STAGE3_FILE=$(curl -s http://mirror.yandex.ru/gentoo-distfiles/releases/amd64/autobuilds/latest-stage3-amd64-desktop-systemd.txt | grep -v '#' | awk '{print $1}')
 STAGE3_URL=https://mirror.yandex.ru/gentoo-distfiles/releases/amd64/autobuilds
 
 
