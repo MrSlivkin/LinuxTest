@@ -79,13 +79,44 @@ fsys_maker()
 stage3_maker()
 {
 cd
-echo"unpack st3 archive"
-cd /mnt/gentoo
+echo "unpack st3 archive"
+echo "want to install stage3?"
+read DESCISION
+if [ "$DESCISION" == "yes" ] ; then
 
-wget $STAGE3_URL/$STAGE3_FILE
-tar xpvf ${STAGE3_FILE:17}
+	cd /mnt/gentoo
+
+	wget $STAGE3_URL/$STAGE3_FILE
+	tar xpvf ${STAGE3_FILE:17}
+else
+echo "goodbye"
+fi 
 }
 
+chroot_maker() {
+
+	echo "mounting filesystems and transition to an isolated environment"
+	cp --dereference /etc/resolv.conf /mnt/gentoo/etc
+
+	mount --types proc /proc /mnt/gentoo/proc
+	mount --rbind /sys /mnt/gentoo/sys
+	mount --make-rslave /mnt/gentoo/sys
+	mount --rbind /dev /mnt/gentoo/dev
+	mount --make-rslave /mnt/gentoo/dev
+	mount --bind /run /mnt/gentoo/run
+	mount --make-slave /mnt/gentoo/run
+
+	chroot /mnt/gentoo /bin/bash
+	source /etc/profile
+	export PS1="(chroot) ${PS1}"
+}
+
+compiling_setting() {
+	echo "change settings for make.conf"	
+	sed -i "s/COMMON_FLAGS='-O2 -pipe'/COMMON_FLAGS='-march=native -O2 -pipe'/g" $MAKE_PATH
+
+	echo "MAKEOPTS='-j2'" >> $MAKE_PATH
+}
 
 debugger()
 {
@@ -99,3 +130,5 @@ read DISK
 partition $DISK || debugger "DISK partition error"
 fsys_maker || debugger "file system making error"
 stage3_maker || debugger "stage3 installation error"
+chroot_maker || debugger "chroot error"
+compiling_setting || debugger "change make.conf error"
