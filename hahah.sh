@@ -18,7 +18,7 @@ password()
 {
 echo " wanna Make a password for root?"
 read RESPONS
-	if [ "$RESPONS" == "yes"] ; then
+	if [ "$RESPONS" == "yes" ] ; then
 		passwd
 	else
 		echo "goodbye"
@@ -73,16 +73,17 @@ fsys_maker()
 	mkdir /mnt/gentoo/boot
 	mount /dev/sda2 /mnt/gentoo
 	mount /dev/sda1 /mnt/gentoo/boot
+	
 }
 
 stage3_maker()
 {
 cd
-cd /mnt/gentoo
 echo"unpack st3 archive"
+cd /mnt/gentoo
 
 wget $STAGE3_URL/$STAGE3_FILE
-tar xpvf stage3-*.tar.bz2 --xattrs-include='*.*' --numeric-owner
+tar xpvf ${STAGE3_FILE:17}
 }
 
 
