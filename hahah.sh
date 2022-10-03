@@ -32,33 +32,37 @@ partition()
 {
 cd
 DISK=$1
-	P_CHECK=$(lsblk -o NAME,FSTYPE -dSn | grep -o $DISK)
-	if [ "$P_CHECK" == "$DISK" ] ; then
-		echo "Your Disk and the Disk on that folder it is the same thing"
-		echo "still want to continue? (yes/no)"
-		read ANSWER
-		if [ "$ANSWER" == "yes" ] ; then
-			echo "disk markup"
-			sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' <<- EOF | fdisk /dev/$DISK
-			o # clear the in memory partition table
-			n # new partition
-			p # primary partition
-			1 # partition number 1
-			# default - start at beginning of disk
-			+1GB
-			n # new partition
-			p # primary partition
-			2 # partion number 2
-			# default, start immediately after preceding partition
-			# default, extend partition to end of disk
-			a # make a partition bootable
-			1 # bootable partition is partition 1 -- /dev/sda1
-			p # print the in-memory partition table
-			w # write the partition table
-			q # and we're done
-			EOF
+echo " wanna Make a partition of disk?"
+read RESPONS
+	if [ "$RESPONS" == "yes" ] ; then
+		P_CHECK=$(lsblk -o NAME,FSTYPE -dSn | grep -o $DISK)
+		if [ "$P_CHECK" == "$DISK" ] ; then
+			echo "Your Disk and the Disk on that folder it is the same thing"
+			echo "still want to continue? (yes/no)"
+			read ANSWER
+			if [ "$ANSWER" == "yes" ] ; then
+				echo "disk markup"
+				sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' <<- EOF | fdisk /dev/$DISK
+				o # clear the in memory partition table
+				n # new partition
+				p # primary partition
+				1 # partition number 1
+				# default - start at beginning of disk
+				+1GB
+				n # new partition
+				p # primary partition
+				2 # partion number 2
+				# default, start immediately after preceding partition
+				# default, extend partition to end of disk
+				a # make a partition bootable
+				1 # bootable partition is partition 1 -- /dev/sda1
+				p # print the in-memory partition table
+				w # write the partition table
+				q # and we're done
+				EOF
 		else
-			echo "goodbye" ; exit 0
+			echo "goodbye"
+			fi
 		fi
 	fi
 	cd
