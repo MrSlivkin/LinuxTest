@@ -22,7 +22,7 @@ eselect profile set "$NUMBER"
 
 world_update(){
 
-	echo "обновление набора @world "
+	echo "update @world "
 	emerge --ask --verbose --update --deep --newuse @world
 
 	echo "make a timezone Yekaterinburg like"
@@ -34,9 +34,10 @@ world_update(){
 
 }
 
-locale_update(){
+locale_update()
+{
 	
-	echo "смена локали на русский"
+	echo "make main local language russian"
 	echo "en_US ISO-8859-1" >> $LOCALE_PATH
 	echo "en_US.UTF-8 UTF-8" >> $LOCALE_PATH
 	echo "ru_RU.UTF-8 UTF-8" >> $LOCALE_PATH
@@ -50,3 +51,14 @@ locale_update(){
 	env-update && source /etc/profile && export PS1="(chroot) $PS1"
 
 }
+
+	debugger()
+	{
+	echo "Error: $1"
+	exit 1
+	}
+	
+	
+portage_installation || debugger "install error"
+profile_selection || debugger"making profile error"
+world_update || debugger"update @world error"
