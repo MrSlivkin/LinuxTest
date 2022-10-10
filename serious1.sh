@@ -105,7 +105,7 @@ if [ "$DESCISION" == "yes" ] ; then
 	cd /mnt/gentoo
 
 	wget https://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-openrc/stage3-amd64-openrc-20220320T170531Z.tar.xz
-	tar --xattrs-include='*.*' --numeric-owner -xpf stage3*
+	tar xpf stage3*
 else
 echo "goodbye"
 fi 
@@ -144,7 +144,7 @@ exit 1
 password || debugger "password error"
 echo "target your disk for partition"
 read DISK
-partition $DISK || debugger "DISK partition error"
+making_partition $DISK || debugger "DISK partition error"
 fsys_maker || debugger "file system making error"
 stage3_maker || debugger "stage3 installation error"
 chroot_maker || debugger "chroot error"
