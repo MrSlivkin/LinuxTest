@@ -57,13 +57,28 @@ locale_update()
 
 }
 
+
+User_Maker()
+{
+echo "Do you want to make a user?"
+read RESPONS
+	if [ "$RESPONS" == "yes" ] ; then
+		echo "Name?"
+		read RESPONS;
+		useradd -g users -G wheel,portage,audio,video,usb,cdrom -m ${REPLY}
+		passwd ${REPLY}
+	else
+		echo "goodbye"
+	fi
+}
+
 	debugger()
 	{
 	echo "Error: $1"
 	exit 1
 	}
 	
-	
+User_Maker || debugger "Making User error"
 portage_installation || debugger "install error"
 profile_selection || debugger"making profile error"
 world_update || debugger"update @world error"
