@@ -51,19 +51,12 @@ DISK=$1
 			p # primary partition
 			2 # partion number 2
 			# default, start immediately after preceding partition
-			+128MB
-			n # new partition
-			3 # partion number 3
-			# default, start immediately after preceding partition
-			+1GB
-			n # new partition
-			4 # partion number 4
-			# default, start immediately after preceding partition
 			# default, extend partition to end of disk
 			a # make a partition bootable
 			1 # bootable partition is partition 1 -- /dev/sda1
 			p # print the in-memory partition table
 			w # write the partition table
+			q # and we're done
 			EOF
 			#q # and we're done
 		else
@@ -104,7 +97,7 @@ if [ "$DESCISION" == "yes" ] ; then
 
 	cd /mnt/gentoo
 
-	wget https://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-openrc/stage3-amd64-openrc-20220320T170531Z.tar.xz
+	wget https://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-openrc/stage3-amd64-desktop-openrc-20221009T170545Z.tar.xz
 	tar xpf stage3*
 else
 echo "goodbye"
