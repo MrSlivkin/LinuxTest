@@ -6,11 +6,16 @@ KEYMAPS=/etc/conf.d/keymaps
 
 core_install()
 {
-
-	echo "preparation for core installation"
-	emerge --ask sys-kernel/gentoo-sources
-	emerge --ask sys-kernel/genkernel
-	eselect kernel set 1
+	echo "wanna install core (genkernel e.t.c)? (yes/no)"
+	read RESPOND
+	if [ "$RESPONS" == "yes" ] ; then
+	{
+		echo "preparation for core installation"
+		emerge --ask sys-kernel/gentoo-sources
+		emerge --ask sys-kernel/genkernel
+		eselect kernel set 1
+	}
+	fi
 
 	sed -i "s/LABEL=boot	\/boot	ext4	noauto,noatime	1 2/LABEL=boot	\/boot	ext4	defaults	0 2/g" /etc/fstab
 	
@@ -86,5 +91,5 @@ debugger()
 }
 
 	core_install || debugger "core error"
-	network || debugger "network installation error"
+	#network || debugger "network installation error"
 	installer || debugger "installer error"
