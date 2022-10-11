@@ -14,23 +14,22 @@ core_install()
 		emerge --ask sys-kernel/gentoo-sources
 		emerge --ask sys-kernel/genkernel
 		eselect kernel set 1
+		sed -i "s/LABEL=boot	\/boot	ext4	noauto,noatime	1 2/LABEL=boot	\/boot	ext4	defaults	0 2/g" /etc/fstab
+	
+		echo "core installation"
+		genkernel all
+
+		ls /boot/vmlinu* /boot/initramfs*
+		echo "hostname='Comandante'"> /etc/conf.d/hostname
+
+		emerge -q networkmanager
+		rc-update add networkmanager boot
+
+		emerge sys-fs/dosfstools
+		emerge sys-fs/btrfs-progs
+		emerge sys-fs/e2fsprogs
 	}
 	fi
-
-	sed -i "s/LABEL=boot	\/boot	ext4	noauto,noatime	1 2/LABEL=boot	\/boot	ext4	defaults	0 2/g" /etc/fstab
-	
-	echo "core installation"
-	genkernel all
-
-	ls /boot/vmlinu* /boot/initramfs*
-	echo "hostname='Comandante'"> /etc/conf.d/hostname
-
-	emerge -q networkmanager
-	rc-update add networkmanager boot
-
-	emerge sys-fs/dosfstools
-	emerge sys-fs/btrfs-progs
-	emerge sys-fs/e2fsprogs
 
 }
 
