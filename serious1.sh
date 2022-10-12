@@ -65,16 +65,6 @@ DISK=$1
 	cd
 }
 
-and_mount_them()
-{
-	mkdir -p /mnt/gentoo
-	mount /dev/sda4 /mnt/gentoo
-	mkdir /mnt/gentoo/boot
-	mount /dev/sda1 /mnt/gentoo/boot
-	mkdir /mnt/gentoo/boot/efi
-	mount /dev/sda2 /mnt/gentoo/boot/efi
-}
-
 fsys_maker() 
 {
 	echo "making file system"
@@ -138,7 +128,6 @@ password || debugger "password error"
 echo "target your disk for partition"
 read DISK
 making_partition $DISK || debugger "DISK partition error"
-#and_mount_them || debugger "disk mounting error"
 fsys_maker || debugger "file system making error"
 stage3_maker || debugger "stage3 installation error"
 chroot_maker || debugger "chroot error"
