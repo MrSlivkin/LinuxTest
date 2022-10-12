@@ -12,7 +12,7 @@ MAKE_PATH=/mnt/gentoo/etc/portage/make.conf
 
 
 
-echo "make a time"
+echo "set time"
 ntpd -q -g
 
 password()
@@ -71,8 +71,8 @@ fsys_maker()
 
 	mkfs.vfat -F 32 /dev/sda1
 	mkfs.ext4 /dev/sda2
-	mkdir /mnt/gentoo/boot
 	mount /dev/sda2 /mnt/gentoo
+	mkdir -p /mnt/gentoo/boot
 	mount /dev/sda1 /mnt/gentoo/boot
 	
 }
