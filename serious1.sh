@@ -58,7 +58,6 @@ DISK=$1
 			w # write the partition table
 			q # and we're done
 			EOF
-			#q # and we're done
 		else
 			echo "goodbye"
 		fi
@@ -80,10 +79,11 @@ fsys_maker()
 {
 	echo "making file system"
 
-	mkfs.ext4 /dev/sda1
-	mkfs.ext4 /dev/sda4
-	mkswap /dev/sda3 && swapon /dev/sda3
-	mkfs.vfat -F 32 /dev/sda2
+	mkfs.vfat -F 32 /dev/sda1
+	mkfs.ext4 /dev/sda2
+	mkdir /mnt/gentoo/boot
+	mount /dev/sda2 /mnt/gentoo
+	mount /dev/sda1 /mnt/gentoo/boot
 	
 }
 
@@ -138,6 +138,7 @@ password || debugger "password error"
 echo "target your disk for partition"
 read DISK
 making_partition $DISK || debugger "DISK partition error"
+#and_mount_them || debugger "disk mounting error"
 fsys_maker || debugger "file system making error"
 stage3_maker || debugger "stage3 installation error"
 chroot_maker || debugger "chroot error"
