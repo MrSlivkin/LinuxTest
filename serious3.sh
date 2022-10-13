@@ -82,6 +82,8 @@ network()
 
 }
 
+
+
 debugger()
 {
 	echo "Error: $1"

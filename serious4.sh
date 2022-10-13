@@ -9,8 +9,8 @@ driver_install(){
 	echo "creating new user:"
 	read NAME
 
-	useradd -m -G users, wheel, audio, video -s /bin/bash $NAME
-	echo "пароль для $NAME"
+	useradd -m -G users,wheel,audio,video -s /bin/bash $NAME
+	echo "password for $NAME"
 
 	passwd $NAME
 
@@ -26,22 +26,27 @@ graphic_install(){
 
 	echo "graphic GNOME interface installation"
 	#eselect profile set default/linux/amd64/17.1/desktop/gnome/systemd
+	env-update
+	sourse /etc/profile
+
 
 	emerge --ask gnome-base/gnome
-
-	env-update && sourse /etc/profile
 	getent group plugdev
 
 	gpasswd -a $NAME plugdev
 
 }
 
-debugger()
-{
+update_sys_installation(){
+emerge --ask app-portage/cfg-update
+cfg-update -u
+}
+
+debugger(){
 	echo "Error: $1"
 	exit 1
 
 }
-
+	update_sys_installation || debugger "update installation error"
 	driver_install || debugger "driver error"
 	graphic_install || debugger "graphic_install error"
