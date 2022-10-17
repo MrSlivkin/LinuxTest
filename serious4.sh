@@ -31,7 +31,7 @@ graphic_install(){
 	source /etc/profile
 
 
-	emerge --ask gnome-base/gnome
+	emerge -r gnome-base/gnome
 	getent group plugdev
 
 	gpasswd -a $NAME plugdev
