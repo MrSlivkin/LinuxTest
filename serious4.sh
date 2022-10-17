@@ -26,8 +26,9 @@ graphic_install(){
 
 	echo "graphic GNOME interface installation"
 	#eselect profile set default/linux/amd64/17.1/desktop/gnome/systemd
+	etc-update
 	env-update
-	sourse /etc/profile
+	source /etc/profile
 
 
 	emerge --ask gnome-base/gnome
