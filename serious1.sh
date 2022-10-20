@@ -94,7 +94,7 @@ if [ "$DESCISION" == "yes" ] ; then
 
 	cd /mnt/gentoo
 
-	wget https://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-openrc/stage3-amd64-desktop-openrc-20221009T170545Z.tar.xz
+	wget https://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-openrc/stage3-amd64-desktop-openrc-20221016T170545Z.tar.xz
 	tar xpf stage3-*.tar.bz2 --xattrs
 else
 echo "goodbye"
