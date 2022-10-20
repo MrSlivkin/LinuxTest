@@ -4,8 +4,7 @@ MAKE_PATH=/etc/portage/make.conf
 FSTAB=/etc/fstab
 KEYMAPS=/etc/conf.d/keymaps
 
-core_install()
-{
+core_install(){
 	echo "wanna install core (genkernel e.t.c)? (yes/no)"
 	read RESPOND
 	if [ "$RESPONS" == "yes" ] ; then
@@ -33,8 +32,7 @@ core_install()
 
 }
 
-installer()
-{
+installer(){
 
 	echo "setting installation"
 	echo "/dev/sda1		/boot		ntfs	defaults, noatime 0 2" >>$FSTAB
@@ -50,7 +48,20 @@ installer()
 	grub-install --target=x86_64-efi --efi-directory=/boot 
 
 	grub-mkconfig -o /boot/grub/grub.cfg
+}
 
+network()
+{
+	hostnamectl hostname Sombra
+	emerge --ask net/dhcpcd
+	rc-update add dhcpcd default
+	rc-service dhcpcd start
+	systemctl enable --now dhcpcd
+
+
+}
+
+umounting(){
 	exit
 	cd
 
@@ -68,24 +79,9 @@ installer()
 
 
 	poweroff
-
 }
 
-network()
-{
-	hostnamectl hostname Sombra
-	emerge --ask net/dhcpcd
-	rc-update add dhcpcd default
-	rc-service dhcpcd start
-	systemctl enable --now dhcpcd
-
-
-}
-
-
-
-debugger()
-{
+debugger(){
 	echo "Error: $1"
 	exit 1
 
@@ -94,3 +90,4 @@ debugger()
 	core_install || debugger "core error"
 	#network || debugger "network installation error"
 	installer || debugger "installer error"
+	umounting || debugger "disk umount error"
