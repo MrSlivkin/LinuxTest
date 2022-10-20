@@ -73,19 +73,20 @@ and_mount_them(){
 	mount /dev/sda2 /mnt/gentoo/boot/efi
 }
 
-fsys_maker() {
+fsys_maker(){
 	echo "making file system"
-
-	mkfs.vfat -F 32 /dev/sda1
-	mkfs.ext4 /dev/sda2
-	mount /dev/sda2 /mnt/gentoo
-	mkdir -p /mnt/gentoo/boot
-	mount /dev/sda1 /mnt/gentoo/boot
-	
+	echo "do you wanna do it?"
+	read "$Answer"
+	if [ "$Answer" == "yes" ]; then
+		mkfs.vfat -F 32 /dev/sda1
+		mkfs.ext4 /dev/sda2
+		mount /dev/sda2 /mnt/gentoo
+		mkdir -p /mnt/gentoo/boot
+		mount /dev/sda1 /mnt/gentoo/boot
+	fi
 }
 
-stage3_maker()
-{
+stage3_maker(){
 cd
 echo "unpack st3 archive"
 echo "want to install stage3?"
@@ -118,15 +119,14 @@ chroot_maker() {
 	export PS1="(chroot) ${PS1}"
 }
 
-compiling_setting() {
+compiling_setting(){
 	echo "change settings for make.conf"	
 	sed -i "s/COMMON_FLAGS='-O2 -pipe'/COMMON_FLAGS='-march=native -O2 -pipe'/g" $MAKE_PATH
 
 	echo "MAKEOPTS='-j2'" >> $MAKE_PATH
 }
 
-debugger()
-{
+debugger(){
 echo "Error: $1"
 exit 1
 }
