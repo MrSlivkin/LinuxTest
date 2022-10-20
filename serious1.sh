@@ -12,7 +12,7 @@ MAKE_PATH=/mnt/gentoo/etc/portage/make.conf
 
 
 
-echo "make a time"
+echo "set time"
 ntpd -q -g
 
 password()
@@ -29,8 +29,7 @@ read RESPONS
 }
 
 
-making_partition()
-{
+making_partition(){
 cd
 DISK=$1
 	P_CHECK=$(lsblk -o NAME,FSTYPE -dSn | grep -o $DISK)
@@ -65,8 +64,7 @@ DISK=$1
 	cd
 }
 
-and_mount_them()
-{
+and_mount_them(){
 	mkdir -p /mnt/gentoo
 	mount /dev/sda4 /mnt/gentoo
 	mkdir /mnt/gentoo/boot
@@ -75,14 +73,14 @@ and_mount_them()
 	mount /dev/sda2 /mnt/gentoo/boot/efi
 }
 
-fsys_maker() 
-{
+fsys_maker() {
 	echo "making file system"
 
-	mkfs.ext4 /dev/sda1
-	mkfs.ext4 /dev/sda4
-	mkswap /dev/sda3 && swapon /dev/sda3
-	mkfs.vfat -F 32 /dev/sda2
+	mkfs.vfat -F 32 /dev/sda1
+	mkfs.ext4 /dev/sda2
+	mount /dev/sda2 /mnt/gentoo
+	mkdir -p /mnt/gentoo/boot
+	mount /dev/sda1 /mnt/gentoo/boot
 	
 }
 
