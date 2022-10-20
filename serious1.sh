@@ -76,7 +76,7 @@ and_mount_them(){
 fsys_maker(){
 	echo "making file system"
 	echo "do you wanna do it?"
-	read "$Answer"
+	read Answer
 	if [ "$Answer" == "yes" ]; then
 		mkfs.vfat -F 32 /dev/sda1
 		mkfs.ext4 /dev/sda2
