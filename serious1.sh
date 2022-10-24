@@ -3,6 +3,8 @@
 
 #UEFI/GPT
 
+STAGE3_FILE=$(curl -s http://mirror.yandex.ru/gentoo-distfiles/releases/amd64/autobuilds/latest-stage3-amd64-desktop-openrc.txt | grep -v '#' | awk '{print $1}')
+STAGE3_URL=http://mirror.yandex.ru/gentoo-distfiles/releases/amd64/autobuilds
 
 set -x
 
@@ -15,8 +17,7 @@ MAKE_PATH=/mnt/gentoo/etc/portage/make.conf
 echo "set time"
 ntpd -q -g
 
-password()
-{
+password(){
 echo " wanna Make a password for root?"
 read RESPONS
 	if [ "$RESPONS" == "yes" ] ; then
@@ -95,8 +96,9 @@ if [ "$DESCISION" == "yes" ] ; then
 
 	cd /mnt/gentoo
 
-	wget https://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-openrc/stage3-amd64-desktop-openrc-20221016T170545Z.tar.xz
-	tar xpf stage3* --xattrs
+	wget $STAGE3_URL/$STAGE3_FILE
+	tar xpvf ${STAGE3_FILE:17}
+	cd
 else
 echo "goodbye"
 fi 
@@ -106,7 +108,8 @@ chroot_maker() {
 
 	echo "mounting filesystems and transition to an isolated environment"
 	
-	cd /mnt/gentoo
+cp --dereference /etc/resolv.conf /mnt/gentoo/etc
+
 	mount --types proc /proc /mnt/gentoo/proc
 	mount --rbind /sys /mnt/gentoo/sys
 	mount --make-rslave /mnt/gentoo/sys
@@ -114,7 +117,8 @@ chroot_maker() {
 	mount --make-rslave /mnt/gentoo/dev
 	mount --bind /run /mnt/gentoo/run
 	mount --make-slave /mnt/gentoo/run
-	cp /etc/resolv.conf etc && chroot . /bin/bash
+
+	chroot /mnt/gentoo /bin/bash
 	source /etc/profile
 	export PS1="(chroot) ${PS1}"
 }
