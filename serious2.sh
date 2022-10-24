@@ -5,22 +5,22 @@ LOCALE02=/etc/env.d/02locale
 MAKE_PATH=/etc/portage/make.conf
 
 
-portage_installation()
-{
+portage_installation(){
 	
 	echo "ebuild gentoo files installation"
 
 	emerge --websync
 	emerge --sync
+	emerge --sync --quiet
 
 }
 
-profile_selection()
-{
+profile_selection(){
 
 echo "choose the profile"
 eselect profile list
 read NUMBER
+echo "You choose number $NUMBER"
 eselect profile set "$NUMBER"
 
 }
@@ -39,8 +39,7 @@ world_update(){
 
 }
 
-locale_update()
-{
+locale_update(){
 	
 	echo "make main local language russian"
 	echo "en_US ISO-8859-1" >> $LOCALE_PATH
@@ -58,8 +57,7 @@ locale_update()
 }
 
 
-User_Maker()
-{
+User_Maker(){
 echo "Do you want to make a user?"
 read RESPONS
 	if [ "$RESPONS" == "yes" ] ; then
@@ -72,11 +70,10 @@ read RESPONS
 	fi
 }
 
-	debugger()
-	{
+debugger(){
 	echo "Error: $1"
 	exit 1
-	}
+}
 	
 User_Maker || debugger "Making User error"
 portage_installation || debugger "install error"
