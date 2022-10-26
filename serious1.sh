@@ -70,8 +70,8 @@ fsys_maker() {
 
 	mkfs.ext4 /dev/sda1
 	mkfs.ext4 /dev/sda2
-	mkdir /mnt/gentoo/boot
 	mount /dev/sda2 /mnt/gentoo
+	mkdir /mnt/gentoo/boot
 	mount /dev/sda1 /mnt/gentoo/boot
 	
 }
