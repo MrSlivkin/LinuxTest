@@ -68,9 +68,9 @@ DISK=$1
 fsys_maker() {
 	echo "making file system"
 
-	mkfs.vfat -F 32 /dev/sda1
+	mkfs.ext4 /dev/sda1
 	mkfs.ext4 /dev/sda2
-	mkdir -p /mnt/gentoo/boot
+	mkdir /mnt/gentoo/boot
 	mount /dev/sda2 /mnt/gentoo
 	mount /dev/sda1 /mnt/gentoo/boot
 	
