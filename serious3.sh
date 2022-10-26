@@ -13,6 +13,7 @@ core_install(){
 		emerge --ask sys-kernel/gentoo-sources
 		emerge --ask sys-kernel/genkernel
 		eselect kernel set 1
+		
 		sed -i "s/LABEL=boot	\/boot	ext4	noauto,noatime	1 2/LABEL=boot	\/boot	ext4	defaults	0 2/g" /etc/fstab
 	
 		echo "core installation"
@@ -34,8 +35,10 @@ core_install(){
 
 installer(){
 
-	echo "/dev/sda1		/boot		ext4	defaults	  0 2" >>$FSTAB
+	echo "setting installation"
+	echo "/dev/sda1		/boot		ntfs	defaults, noatime 0 2" >>$FSTAB
 	echo "/dev/sda2		/		ext4	noatime 	  0 0" >>$FSTAB
+	#echo "/dev/cdrom	/mnt/cdrom	auto	noauto,user	  0 0" >>$FSTAB
 
 
 	echo  'GRUB_PLATFORMS="pc"' >> $MAKE_PATH
@@ -46,10 +49,20 @@ installer(){
 	grub-install --target=x86_64-efi --efi-directory=/boot 
 
 	grub-mkconfig -o /boot/grub/grub.cfg
-
+	
 	exit
 	cd
+}
 
+network(){
+	hostnamectl hostname Sombra
+	emerge --ask net/dhcpcd
+	rc-update add dhcpcd default
+	rc-service dhcpcd start
+	systemctl enable --now dhcpcd
+}
+
+umounting(){
 	umount -l /mnt/gentoo/dev{/shm,/pts,}
 	umount -R /mnt/gentoo
 
@@ -66,17 +79,6 @@ installer(){
 	poweroff
 }
 
-network()
-{
-	hostnamectl hostname Sombra
-	emerge --ask net/dhcpcd
-	rc-update add dhcpcd default
-	rc-service dhcpcd start
-	systemctl enable --now dhcpcd
-
-
-}
-
 debugger(){
 	echo "Error: $1"
 	exit 1
@@ -86,3 +88,4 @@ debugger(){
 	core_install || debugger "core error"
 	#network || debugger "network installation error"
 	installer || debugger "installer error"
+	umounting || debugger "disk umount error"

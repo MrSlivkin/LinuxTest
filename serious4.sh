@@ -1,8 +1,7 @@
 #!/bin/bash
 
 MAKE_PATH=/etc/portage/make.conf
-
-
+MAKE_PATH2 = /etc/conf.d/display-manager
 driver_install(){
 
 	echo "drivers update installation"
@@ -19,23 +18,23 @@ driver_install(){
 
 	emerge --pretend --verbose x11-base/xorg-drivers
 	emerge --ask x11-base/xorg-server
-
+	
+	rc-update add elogind boot
+	rc-service elogind start
+	echo "DISPLAYMANAGER='gdm'" >>
+	emerge --ask --noreplace gui-libs/display-manager-init
 }
 
 graphic_install(){
 
 	echo "graphic GNOME interface installation"
 	#eselect profile set default/linux/amd64/17.1/desktop/gnome/systemd
-	etc-update
-	env-update
-	source /etc/profile
+	emerge --ask gnome-base/gnome
 
-
-	emerge --keep-going --ask gnome-base/gnome
+	env-update && sourse /etc/profile
 	getent group plugdev
 
-	gpasswd -A $NAME plugdev
-
+	gpasswd -a $NAME plugdev
 }
 
 update_sys_installation(){

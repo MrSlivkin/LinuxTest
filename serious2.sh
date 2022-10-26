@@ -5,24 +5,27 @@ LOCALE02=/etc/env.d/02locale
 MAKE_PATH=/etc/portage/make.conf
 
 
-portage_installation(){
+portage_installation()
+{
 	
 	echo "ebuild gentoo files installation"
 
-	emerge --websync
+	emerge-websync
 	emerge --sync
-	emerge --sync --quiet
 
 }
 
 profile_selection(){
+echo "set profile set 6"
 
-echo "choose the profile"
-eselect profile list
-read NUMBER
-echo "You choose number $NUMBER"
-eselect profile set "$NUMBER"
-
+echo "wanna choose the another profile?"
+read NUMANSW
+if[ "$NUMANSW" == "yes" ]; then
+	eselect profile list
+	read NUMBER
+	eselect profile set "$NUMBER"
+	echo "$NUMBER"
+fi
 }
 
 world_update(){
@@ -30,8 +33,8 @@ world_update(){
 	echo "update @world "
 	emerge --ask --verbose --update --deep --newuse @world
 
-	echo "make a timezone Yekaterinburg like"
-	echo "USE='minimal -pasystemd  X gtk gnome -qt5 -kde dvd alsa cdr'" >> $MAKE_PATH
+	echo "set a Yekaterinburg timezone"
+	echo "USE=' systemd minimal -pasystemd  X gtk gnome -qt5 -kde dvd alsa cdr'" >> $MAKE_PATH
 	echo "ACCEPT_LICENSE='*'" >> $MAKE_PATH
 	echo "Asia/Yekaterinburg" > /etc/timezone
 
@@ -55,27 +58,11 @@ locale_update(){
 	env-update && source /etc/profile && export PS1="(chroot) $PS1"
 
 }
-
-
-User_Maker(){
-echo "Do you want to make a user?"
-read RESPONS
-	if [ "$RESPONS" == "yes" ] ; then
-		echo "Name?"
-		read RESPONS;
-		useradd -g users -G wheel,portage,audio,video,usb,cdrom -m ${REPLY}
-		passwd ${REPLY}
-	else
-		echo "goodbye"
-	fi
-}
-
-debugger(){
+	debugger(){
 	echo "Error: $1"
 	exit 1
-}
+	}
 	
-User_Maker || debugger "Making User error"
 portage_installation || debugger "install error"
 profile_selection || debugger"making profile error"
 world_update || debugger"update @world error"

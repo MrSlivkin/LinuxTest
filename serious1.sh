@@ -3,15 +3,13 @@
 
 #UEFI/GPT
 
-STAGE3_FILE=$(curl -s http://mirror.yandex.ru/gentoo-distfiles/releases/amd64/autobuilds/latest-stage3-amd64-desktop-openrc.txt | grep -v '#' | awk '{print $1}')
-STAGE3_URL=http://mirror.yandex.ru/gentoo-distfiles/releases/amd64/autobuilds
 
 set -x
 
 MAKE_PATH=/mnt/gentoo/etc/portage/make.conf
 #A_L=ACCEPT_LICENSE="-* @FREE"
-
-
+STAGE3_FILE=$(curl -s http://mirror.yandex.ru/gentoo-distfiles/releases/amd64/autobuilds/latest-stage3-amd64-desktop-openrc.txt | grep -v '#' | awk '{print $1}')
+STAGE3_URL=http://mirror.yandex.ru/gentoo-distfiles/releases/amd64/autobuilds
 
 
 echo "set time"
@@ -41,6 +39,8 @@ DISK=$1
 		if [ "$ANSWER" == "yes" ] ; then
 			echo "disk markup"
 			sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' <<- EOF | fdisk /dev/$DISK
+			echo "disk markup"
+			sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' <<- EOF | fdisk /dev/$DISK
 			o # clear the in memory partition table
 			n # new partition
 			p # primary partition
@@ -65,26 +65,15 @@ DISK=$1
 	cd
 }
 
-and_mount_them(){
-	mkdir -p /mnt/gentoo
-	mount /dev/sda4 /mnt/gentoo
-	mkdir /mnt/gentoo/boot
-	mount /dev/sda1 /mnt/gentoo/boot
-	mkdir /mnt/gentoo/boot/efi
-	mount /dev/sda2 /mnt/gentoo/boot/efi
-}
-
-fsys_maker(){
+fsys_maker() {
 	echo "making file system"
-	echo "do you wanna do it?"
-	read Answer
-	if [ "$Answer" == "yes" ]; then
-		mkfs.vfat -F 32 /dev/sda1
-		mkfs.ext4 /dev/sda2
-		mount /dev/sda2 /mnt/gentoo
-		mkdir -p /mnt/gentoo/boot
-		mount /dev/sda1 /mnt/gentoo/boot
-	fi
+
+	mkfs.vfat -F 32 /dev/sda1
+	mkfs.ext4 /dev/sda2
+	mkdir -p /mnt/gentoo/boot
+	mount /dev/sda2 /mnt/gentoo
+	mount /dev/sda1 /mnt/gentoo/boot
+	
 }
 
 stage3_maker(){
@@ -104,12 +93,11 @@ echo "goodbye"
 fi 
 }
 
-chroot_maker() {
+chroot_maker(){
 
 	echo "mounting filesystems and transition to an isolated environment"
+	cp --dereference /etc/resolv.conf /mnt/gentoo/etc
 	
-cp --dereference /etc/resolv.conf /mnt/gentoo/etc
-
 	mount --types proc /proc /mnt/gentoo/proc
 	mount --rbind /sys /mnt/gentoo/sys
 	mount --make-rslave /mnt/gentoo/sys
@@ -117,7 +105,7 @@ cp --dereference /etc/resolv.conf /mnt/gentoo/etc
 	mount --make-rslave /mnt/gentoo/dev
 	mount --bind /run /mnt/gentoo/run
 	mount --make-slave /mnt/gentoo/run
-
+	
 	chroot /mnt/gentoo /bin/bash
 	source /etc/profile
 	export PS1="(chroot) ${PS1}"
@@ -139,7 +127,6 @@ password || debugger "password error"
 echo "target your disk for partition"
 read DISK
 making_partition $DISK || debugger "DISK partition error"
-#and_mount_them || debugger "disk mounting error"
 fsys_maker || debugger "file system making error"
 stage3_maker || debugger "stage3 installation error"
 chroot_maker || debugger "chroot error"
