@@ -20,7 +20,7 @@ echo "set profile set 6"
 eselect profile set 6
 echo "wanna choose the another profile?"
 read NUMANSW
-if[ "$NUMANSW" == "yes" ]; then
+if [ "$NUMANSW" == "yes" ] ; then
 	eselect profile list
 	read NUMBER
 	eselect profile set "$NUMBER"
