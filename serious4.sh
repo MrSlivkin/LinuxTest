@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MAKE_PATH=/etc/portage/make.conf
-MAKE_PATH2 = /etc/conf.d/display-manager
+
 driver_install(){
 
 	echo "drivers update installation"
