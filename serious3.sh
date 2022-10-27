@@ -52,17 +52,7 @@ installer(){
 	
 	exit
 	cd
-}
-
-network(){
-	hostnamectl hostname Sombra
-	emerge --ask net/dhcpcd
-	rc-update add dhcpcd default
-	rc-service dhcpcd start
-	systemctl enable --now dhcpcd
-}
-
-umounting(){
+	
 	umount -l /mnt/gentoo/dev{/shm,/pts,}
 	umount -R /mnt/gentoo
 
@@ -77,6 +67,16 @@ umounting(){
 
 
 	poweroff
+	
+	
+}
+
+network(){
+	hostnamectl hostname Sombra
+	emerge --ask net/dhcpcd
+	rc-update add dhcpcd default
+	rc-service dhcpcd start
+	systemctl enable --now dhcpcd
 }
 
 debugger(){
