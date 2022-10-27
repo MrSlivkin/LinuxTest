@@ -12,6 +12,7 @@ portage_installation()
 
 	emerge --websync
 	emerge --sync
+	emerge --sync --quiet
 
 }
 
