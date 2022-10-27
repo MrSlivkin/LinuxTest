@@ -41,8 +41,8 @@ installer(){
 	#echo "/dev/cdrom	/mnt/cdrom	auto	noauto,user	  0 0" >>$FSTAB
 
 
-	echo  'GRUB_PLATFORMS="pc"' >> $MAKE_PATH
-
+	echo  'GRUB_PLATFORMS="efi-64 pc"' >> $MAKE_PATH
+	
 	emerge --ask sys-boot/grub:2
 	emerge --ask --update --newuse --verbose sys-boot/grub:2
 	grub-install /dev/sda
