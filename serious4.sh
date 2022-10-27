@@ -21,7 +21,7 @@ driver_install(){
 	
 	rc-update add elogind boot
 	rc-service elogind start
-	echo "DISPLAYMANAGER='gdm'" >>
+	#echo "DISPLAYMANAGER='gdm'" >>
 	emerge --ask --noreplace gui-libs/display-manager-init
 }
 
