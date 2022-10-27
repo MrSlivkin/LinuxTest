@@ -31,7 +31,7 @@ graphic_install(){
 	#eselect profile set default/linux/amd64/17.1/desktop/gnome/systemd
 	emerge --ask --getbinpkg gnome-base/gnome
 
-	env-update && sourсe /etc/profile
+	env-update && sourse /etc/profile
 	getent group plugdev
 
 	gpasswd -a $NAME plugdev
