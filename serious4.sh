@@ -26,12 +26,12 @@ driver_install(){
 }
 
 graphic_install(){
-
+	emerge --ask sudo
 	echo "graphic GNOME interface installation"
 	#eselect profile set default/linux/amd64/17.1/desktop/gnome/systemd
-	emerge --ask gnome-base/gnome
+	emerge --ask --getbinpkg gnome-base/gnome
 
-	env-update && sourse /etc/profile
+	env-update && sourсe /etc/profile
 	getent group plugdev
 
 	gpasswd -a $NAME plugdev
