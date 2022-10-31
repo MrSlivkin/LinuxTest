@@ -28,6 +28,7 @@ driver_install(){
 graphic_install(){
 	emerge --ask sudo
 	echo "graphic GNOME interface installation"
+	wget https://gitweb.gentoo.org/repo/gentoo.git/plain/gnome-base/gnome/gnome-40.0-r1.ebuild
 	#eselect profile set default/linux/amd64/17.1/desktop/gnome/systemd
 	emerge --ask --getbinpkg gnome-base/gnome
 
