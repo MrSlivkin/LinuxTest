@@ -129,5 +129,5 @@ read DISK
 making_partition $DISK || debugger "DISK partition error"
 fsys_maker || debugger "file system making error"
 stage3_maker || debugger "stage3 installation error"
-chroot_maker || debugger "chroot error"
-compiling_setting || debugger "change make.conf error"
+compiling_setting || debugger "chroot error"
+chroot_maker || debugger "change make.conf error"
