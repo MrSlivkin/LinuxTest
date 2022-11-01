@@ -88,4 +88,3 @@ debugger(){
 	core_install || debugger "core error"
 	#network || debugger "network installation error"
 	installer || debugger "installer error"
-	umounting || debugger "disk umount error"
