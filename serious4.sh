@@ -2,14 +2,15 @@
 
 MAKE_PATH=/etc/portage/make.conf
 
+
 driver_install(){
 
 	echo "drivers update installation"
 	echo "creating new user:"
 	read NAME
 
-	useradd -m -G users,wheel,audio,video -s /bin/bash $NAME
-	echo "password for $NAME"
+	useradd -m -G wheel,audio,video $NAME
+	echo "пароль для $NAME"
 
 	passwd $NAME
 
@@ -18,36 +19,32 @@ driver_install(){
 
 	emerge --pretend --verbose x11-base/xorg-drivers
 	emerge --ask x11-base/xorg-server
-	
-	rc-update add elogind boot
-	rc-service elogind start
-	#echo "DISPLAYMANAGER='gdm'" >>
-	emerge --ask --noreplace gui-libs/display-manager-init
+
 }
 
 graphic_install(){
+
 	emerge --ask sudo
-	echo "graphic GNOME interface installation"
-	wget https://gitweb.gentoo.org/repo/gentoo.git/plain/gnome-base/gnome/gnome-40.0-r1.ebuild
+
+	echo "GNOME graphic interface installation"
 	#eselect profile set default/linux/amd64/17.1/desktop/gnome/systemd
+
+	wget https://gitweb.gentoo.org/repo/gentoo.git/plain/gnome-base/gnome/gnome-40.0-r1.ebuild
 	emerge --ask --getbinpkg gnome-base/gnome
-
-	env-update && source /etc/profile
+	env-update && sourse /etc/profile
 	getent group plugdev
+	#useradd -m -G users,wheel,audio -s /bin/bash $NAME
+	#passwd $NAME 
 
-	gpasswd -a $NAME plugdev
 }
 
-update_sys_installation(){
-emerge --ask app-portage/cfg-update
-cfg-update -u
-}
+error_exit(){
 
-debugger(){
-	echo "Error: $1"
+	echo "debug"
+	echo"Error: $1"
 	exit 1
 
 }
-	update_sys_installation || debugger "update installation error"
-	driver_install || debugger "driver error"
-	graphic_install || debugger "graphic_install error"
+
+	driver_install || error_exit "driver error"
+	graphic_install || error_exit "graphic_install error"
