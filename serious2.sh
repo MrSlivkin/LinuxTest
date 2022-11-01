@@ -10,7 +10,7 @@ portage_installation()
 	
 	echo "ebuild gentoo files installation"
 
-	emerge --websync
+	emerge-webrsync
 	emerge --sync
 	emerge --sync --quiet
 
