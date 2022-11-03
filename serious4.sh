@@ -10,9 +10,12 @@ driver_install(){
 	read NAME
 
 	useradd -m -G wheel,audio,video $NAME
-	echo "пароль для $NAME"
-
-	passwd $NAME
+	echo "wanna change or create $NAME `s password?"
+	if [ "$RESPONS" == "yes" ] ; then
+		passwd $NAME
+	else
+		echo "ok, bye"
+	fi
 
 	echo "VIDEO_CARDS='amdgpu radeon radensi'" >>$MAKE_PATH
 	echo "INPUT_DEVICES='synaptics libinput'" >>$MAKE_PATH
