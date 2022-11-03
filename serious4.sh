@@ -31,7 +31,7 @@ graphic_install(){
 
 	wget https://gitweb.gentoo.org/repo/gentoo.git/plain/gnome-base/gnome/gnome-40.0-r1.ebuild
 	emerge --ask --getbinpkg gnome-base/gnome
-	env-update && sourse /etc/profile
+	env-update && source /etc/profile
 	getent group plugdev
 	#useradd -m -G users,wheel,audio -s /bin/bash $NAME
 	#passwd $NAME 
@@ -41,7 +41,7 @@ graphic_install(){
 error_exit(){
 
 	echo "debug"
-	echo"Error: $1"
+	echo "Error: $1"
 	exit 1
 
 }
