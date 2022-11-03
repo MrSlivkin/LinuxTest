@@ -50,6 +50,7 @@ installer(){
 	
 	emerge --ask sys-boot/grub:2
 	emerge --ask --update --newuse --verbose sys-boot/grub:2
+	echo "GRUB_DISABLE_OS_PROBER=false" >> /etc/default/grub
 	grub-install /dev/sda
 	grub-install --target=x86_64-efi --efi-directory=/boot 
 
