@@ -4,6 +4,12 @@ MAKE_PATH=/etc/portage/make.conf
 FSTAB=/etc/fstab
 KEYMAPS=/etc/conf.d/keymaps
 
+
+	echo "EMERGE_DEFAULT_OPTS=' --getbinpkgonly'" >> $MAKE_PATH
+
+	echo "FEATURES='getbinpkg'" >> $MAKE_PATH
+	echo "PORTAGE_BINHOST='https://mirror.yandex.ru/calculate/grp/x86_64/ https://mirror.yandex.ru/sabayon/community/community-binhost/'" >> $MAKE_PATH
+	
 core_install(){
 	echo "wanna install core (genkernel e.t.c)? (yes/no)"
 	read RESPOND
@@ -38,7 +44,6 @@ installer(){
 	echo "setting installation"
 	echo "/dev/sda1		/boot		ntfs	defaults, noatime 0 2" >>$FSTAB
 	echo "/dev/sda2		/		ext4	noatime 	  0 0" >>$FSTAB
-	#echo "/dev/cdrom	/mnt/cdrom	auto	noauto,user	  0 0" >>$FSTAB
 
 
 	echo  'GRUB_PLATFORMS="pc"' >> $MAKE_PATH
