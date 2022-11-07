@@ -10,7 +10,8 @@ driver_install(){
 	read NAME
 
 	useradd -m -G wheel,audio,video $NAME
-	echo "wanna change or create $NAME `s password?"
+	echo "wanna change or create $NAME password?"
+	read RESPONS
 	if [ "$RESPONS" == "yes" ] ; then
 		passwd $NAME
 	else
