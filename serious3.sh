@@ -16,7 +16,8 @@ core_install(){
 	if [ "$RESPONS" == "yes" ] ; then
 	{
 		echo "preparation for core installation"
-		emerge --ask sys-kernel/gentoo-sources
+		wget https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-kernel/gentoo-sources/gentoo-sources-5.15.75.ebuild
+		emerge --ask --getbinpkg sys-kernel/gentoo-sources
 		emerge --ask sys-kernel/genkernel
 		eselect kernel set 1
 		
