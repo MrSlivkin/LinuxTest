@@ -118,7 +118,7 @@ compiling_setting(){
 	sed -i "s/COMMON_FLAGS='-O2 -pipe'/COMMON_FLAGS='-march=native -O2 -pipe'/g" $MAKE_PATH
 
 	echo "MAKEOPTS='-j2'" >> $MAKE_PATH
-	echo "ABI_X86='32 64'" >> $MAKE_PATH
+	echo "ABI_X86='64'" >> $MAKE_PATH
 }
 
 debugger(){
