@@ -37,6 +37,15 @@ graphic_install(){
 	emerge --ask --getbinpkg gnome-base/gnome
 	env-update && source /etc/profile
 	getent group plugdev
+	gpasswd -a $NAME plugdev
+	
+	rc-update add elogind boot
+	rc-service elogind start
+	
+	emerge --ask --noreplace gui-libs/display-manager-init
+	
+	echo "DISPLAYMANAGER='gdm'" >> /etc/conf.d/display-manager
+	rc-update add display-manager default
 	#useradd -m -G users,wheel,audio -s /bin/bash $NAME
 	#passwd $NAME 
 
