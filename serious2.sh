@@ -32,7 +32,7 @@ fi
 world_update(){
 
 	echo "update @world "
-	emerge --ask --verbose --update --deep --newuse @world
+	emerge --ask --verbose --update --deep --newuse --keep-going [ y | n ] @world
 
 	echo "set a Yekaterinburg timezone"
 	echo "USE=' systemd minimal -pasystemd  X gtk gnome -qt5 -kde dvd alsa cdr'" >> $MAKE_PATH
