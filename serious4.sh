@@ -38,18 +38,16 @@ graphic_install(){
 	env-update && source /etc/profile
 	getent group plugdev
 	gpasswd -a $NAME plugdev
-	
+}
+
+gdm_installation(){
+	emerge --ask --noreplace gui-libs/display-manager-init
+	echo "DISPLAYMANAGER='gdm'" >> /etc/conf.d/display-manager
 	rc-update add elogind boot
 	rc-service elogind start
-	
-	emerge --ask --noreplace gui-libs/display-manager-init
-	
-	echo "DISPLAYMANAGER='gdm'" >> /etc/conf.d/display-manager
-	rc-update add display-manager default
-	#useradd -m -G users,wheel,audio -s /bin/bash $NAME
-	#passwd $NAME 
-
+	systemctl enable --now gdm.service
 }
+
 
 error_exit(){
 
@@ -61,3 +59,4 @@ error_exit(){
 
 	driver_install || error_exit "driver error"
 	graphic_install || error_exit "graphic_install error"
+	gdm_installation || debugger "gdm_install error"
