@@ -54,11 +54,9 @@ locale_update(){
 
 	echo "LANG='ru_RU.UTF-8'" >$LOCALE02
 	echo "LC_COLLATE='C.UTF-8'" >>$LOCALE02
-	apt-get update
-	apt-get install systemd
+	
 	emerge --ask sys-kernel/gentoo-sources
 	env-update && source /etc/profile && export PS1="(chroot) $PS1"
-
 }
 	debugger(){
 	echo "Error: $1"
